@@ -22,7 +22,7 @@ class BaiduSpider(scrapy.Spider):
     allowed_domains = ['baidu.com']
     start_urls = ['https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?resource_id=6899&query=失信人&pn=10&rn=10&ie=utf-8&oe=utf-8']
 
-    def parse(self, response):
+    def parse_data(self, response):
         datas=json.loads(response.text)
         #获取总条数
         #disp_Num=jsonpath(results,'$..dispNum')[0]
@@ -45,7 +45,7 @@ class BaiduSpider(scrapy.Spider):
             # 失信内容
             item['content']=result['duty']
             # 公布日期
-            item['publish_date']=result['publishDate']
+            item['publish_date']=result['publishDate'].replace('年','-').replace('月','-').replace('日','')
             # 公布/执行单位
             item['publish_unit']=result['courtName']
             # 创建日期
@@ -57,4 +57,14 @@ class BaiduSpider(scrapy.Spider):
             yield item
         #获取总页数
         # list_Num=2
+    def parse(self, response):
+        datas = json.loads(response.text)
+        #获取总条数
+        disp_Num=jsonpath(datas,'$..dispNum')[0]
+        url_pattern='https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?resource_id=6899&query=失信人&pn={}&rn=10&ie=utf-8&oe=utf-8'
+        #每隔10条数据
+        for pn in range(0,disp_Num,10):
+            url=url_pattern.format(pn)
+            #创建请求，交个引擎
+            yield scrapy.Request(url,callback=self.parse_data)
 
