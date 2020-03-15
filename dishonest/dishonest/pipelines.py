@@ -5,7 +5,7 @@ import pymysql
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from .settings import MYSQL_HOST,MYSQL_PORT,MYSQL_USER,MYSQL_PASSWORD,MYSQL_DB
-
+#定义Item Pipeline的实现，实现数据的清洗，储存，验证。
 """
 
 实现管道类

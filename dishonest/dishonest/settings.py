@@ -65,7 +65,8 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #在setting中开启，并配置重置次数
 DOWNLOADER_MIDDLEWARES = {
-        # 'dishonest.middlewares.ProxyMiddleware': 500,
+        'dishonest.middlewares.GsxtMiddleware': 10,
+        'dishonest.middlewares.ProxyMiddleware': 500,
         'dishonest.middlewares.RandomUserAgent': 543,
 }
 #并配置重置次数
@@ -167,3 +168,14 @@ USER_AGENTS=[
 
 #想要知道重复了多少个，可以配置日志等级
 LOG_LEVEL='INFO'
+#配置redis的url
+REDIS_URL='redis://127.0.0.1:6379/0'
+#p配置cookies字典中的相关键
+#cookies键
+COOKIES_KEY='cookies'
+#user-agent的键
+COOKIES_USER_AGENT_KEY='user_agent'
+#地理ip的键
+COOKIES_PROXY_KEY='proxy'
+#配置cookies字典在redis数据库中的键
+REDIS_COOKIES_KEY='redis_cookies'
